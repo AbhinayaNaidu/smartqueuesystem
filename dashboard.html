@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Queue Dashboard</title>
+<style>
+body{
+font-family:Arial;
+background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');
+background-size:cover;
+padding:40px;
+}
+
+.container{
+background:rgba(255,255,255,0.95);
+padding:30px;
+border-radius:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+.green{color:green;font-weight:bold;}
+.yellow{color:orange;font-weight:bold;}
+.red{color:red;font-weight:bold;}
+
+.nav a{
+margin-right:10px;
+background:#007bff;
+color:white;
+padding:8px 14px;
+text-decoration:none;
+border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+<a href="/">Home</a>
+<a href="/dashboard">Dashboard</a>
+<a href="/admin">Admin</a>
+</div>
+
+<div class="container">
+
+<h2>Live Queue Dashboard</h2>
+
+<table id="table">
+<tr>
+<th>Location</th>
+<th>People</th>
+<th>Waiting Time</th>
+<th>Status</th>
+</tr>
+</table>
+
+</div>
+
+<script>
+
+function loadDashboard(){
+
+fetch("/dashboard_data")
+.then(res=>res.json())
+.then(data=>{
+
+let table=document.getElementById("table")
+table.innerHTML=`<tr>
+<th>Location</th>
+<th>People</th>
+<th>Waiting Time</th>
+<th>Status</th>
+</tr>`
+
+data.forEach(d=>{
+
+let cls="green"
+
+if(d.status=="Medium") cls="yellow"
+if(d.status=="Heavy") cls="red"
+
+table.innerHTML+=`
+<tr>
+<td>${d.place}</td>
+<td>${d.count}</td>
+<td>${Math.floor(d.wait_sec/60)} min</td>
+<td class="${cls}">${d.status}</td>
+</tr>
+`
+
+})
+
+})
+
+}
+
+loadDashboard()
+
+setInterval(loadDashboard,5000)
+
+</script>
+
+</body>
+</html>

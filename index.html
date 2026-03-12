@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Queue System</title>
+<style>
+body{font-family:Arial;margin:0;background-image:url('https://87solutions.ai/wp-content/uploads/2025/02/AI-handling-a-long-queue-at-the-restaurant.webp');background-size:cover;display:flex;justify-content:center;align-items:center;height:100vh;}
+.container{background:rgba(255,255,255,0.95);padding:40px;border-radius:12px;width:420px;text-align:center;box-shadow:0 0 15px rgba(0,0,0,0.3);}
+.nav a{margin:6px;padding:8px 14px;background:#007bff;color:white;text-decoration:none;border-radius:6px;}
+select,button{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:none;}
+button{background:#28a745;color:white;font-weight:bold;cursor:pointer;}
+.result{margin-top:20px;padding:15px;border-radius:8px;background:#f4f4f4;}
+.msg{margin-top:15px;padding:10px;border-radius:6px;font-weight:bold;}
+.green{background:#d4edda;color:#155724;}
+.yellow{background:#fff3cd;color:#856404;}
+.red{background:#f8d7da;color:#721c24;}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="nav">
+<a href="/">Home</a>
+<a href="/dashboard">Dashboard</a>
+<a href="/admin">Admin</a>
+</div>
+<h2>Smart Queue Prediction</h2>
+<form action="/join" method="post">
+<select name="place" required onchange="clearResult()">
+<option value="">Choose Location</option>
+<option value="Apollo Hospital">🏥 Apollo Hospital</option>
+<option value="SBI Bank">🏦 SBI Bank</option>
+<option value="Railway Counter">🎫 Railway Counter</option>
+<option value="College Office">🏫 College Office</option>
+<option value="Food Court">🍔 Food Court</option>
+</select>
+<button type="submit">Join Queue</button>
+</form>
+
+{% if place %}
+<div id="result" class="result">
+<h3>{{place}}</h3>
+<p>People in Queue: <span id="count">{{count}}</span></p>
+<p>Estimated Waiting: <span id="wait">{{wait}}</span> minutes</p>
+<p>Status: <span id="status">{{status}}</span></p>
+<p>Last Updated: <span id="time">{{time}}</span></p>
+<div id="message"></div>
+</div>
+
+<script>
+let place="{{place}}"
+let wait={{wait}}*60
+function clearResult(){let r=document.getElementById("result");if(r){r.style.display="none"}}
+function updateQueue(){
+  fetch("/update_queue",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"place="+place})
+  .then(res=>res.json())
+  .then(data=>{
+    document.getElementById("count").innerText=data.count
+    document.getElementById("status").innerText=data.status
+    document.getElementById("time").innerText=data.time
+    wait = data.wait*60
+  })
+}
+function updateCountdown(){
+  if(wait>0){wait--}
+  document.getElementById("wait").innerText=Math.floor(wait/60)+"m "+wait%60+"s"
+  let msg="",cls=""
+  if(wait<=0){msg="Your turn has arrived!";cls="green"}
+  else if(wait<10*60){msg="Your turn is coming soon!";cls="green"}
+  else if(wait<30*60){msg="Please arrive within 10 minutes.";cls="yellow"}
+  else{msg="Queue is long. Visit later.";cls="red"}
+  document.getElementById("message").innerHTML="<div class='msg "+cls+"'>"+msg+"</div>"
+}
+setInterval(updateQueue,5000)
+setInterval(updateCountdown,1000)
+</script>
+{% endif %}
+</div>
+</body>
+</html>

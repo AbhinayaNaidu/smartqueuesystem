@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Admin Panel</title>
+
+<style>
+
+body{
+font-family:Arial;
+background-image:url('https://images.unsplash.com/photo-1492724441997-5dc865305da7');
+background-size:cover;
+padding:40px;
+}
+
+.container{
+background:rgba(255,255,255,0.95);
+padding:30px;
+border-radius:10px;
+}
+
+button{
+padding:8px 12px;
+margin:4px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.add{background:#28a745;color:white;}
+.serve{background:#ffc107;}
+.reset{background:#dc3545;color:white;}
+
+.nav a{
+margin-right:10px;
+background:#007bff;
+color:white;
+padding:8px 14px;
+text-decoration:none;
+border-radius:6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="nav">
+<a href="/">Home</a>
+<a href="/dashboard">Dashboard</a>
+<a href="/admin">Admin</a>
+</div>
+
+<div class="container">
+
+<h2>Admin Queue Control</h2>
+
+{% for q in queues %}
+
+<p><b>{{q.place}}</b> — {{q.count}} people</p>
+
+<button class="add" onclick="update('{{q.place}}','add')">Add</button>
+
+<button class="serve" onclick="update('{{q.place}}','serve')">Serve</button>
+
+<button class="reset" onclick="update('{{q.place}}','reset')">Reset</button>
+
+<hr>
+
+{% endfor %}
+
+</div>
+
+<script>
+
+function update(place,action){
+
+fetch("/admin_update",{
+method:"POST",
+headers:{"Content-Type":"application/x-www-form-urlencoded"},
+body:"place="+place+"&action="+action
+})
+
+.then(()=>location.reload())
+
+}
+
+</script>
+
+</body>
+</html>
