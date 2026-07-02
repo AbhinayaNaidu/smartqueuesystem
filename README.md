@@ -1,37 +1,35 @@
-# 🏥 Smart Queue System
+# 🏥 Smart Queue Management System
 
-A web-based queue management system developed to reduce waiting time and improve service efficiency.
+A web-based queue management system designed to reduce waiting time by displaying real-time queue status and estimated waiting time.
 
 ## Problem Statement
-Long waiting queues in hospitals and service centers lead to inconvenience and poor user experience.
+People often spend unnecessary time waiting in queues at hospitals and service centers. This system allows users to check the queue status before visiting.
 
 ## Features
-- Token generation
-- Real-time queue updates
-- Queue status monitoring
-- Estimated waiting time
-- Admin management
+- Select a service location
+- View current queue status
+- Display estimated waiting time
+- Admin can add people to the queue
+- Admin can remove people from the queue
+- Queue updates are reflected instantly on the user webpage
 
 ## Tech Stack
-- Frontend:
-- Backend:
-- Database:
+- Frontend: HTML, CSS, JavaScript
+- Backend: Python, Flask
+- Data Storage: In-memory Python data structures (No database used)
 
 ## Workflow
-1. User generates a token.
-2. Token is added to the queue.
-3. Queue status updates in real time.
-4. Users are notified when their turn approaches.
+1. User selects a location.
+2. The system displays the queue length and estimated waiting time.
+3. The admin adds or removes people from the queue.
+4. Changes are reflected instantly on the user's webpage.
 
 ## Future Enhancements
-- SMS Notifications
-- QR Code Integration
-- Analytics Dashboard
-
-## Installation
-1. Clone the repository
-2. Install dependencies
-3. Start the application
+- Face recognition for automatic customer identification
+- Camera-based automatic queue entry
+- Database integration for permanent queue records
+- SMS or mobile notifications
+- AI-based waiting time prediction
 
 ## Author
-Abhinaya Naidu
+Naidu Abhinaya
